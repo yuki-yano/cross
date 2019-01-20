@@ -1,18 +1,21 @@
 import { createStore, applyMiddleware } from "redux"
 import logger from "redux-logger"
-import thunk from "redux-thunk"
+import createSagaMiddleware from "redux-saga"
 
-import reducer from "./reducer"
+import reducer from "./reducers"
+import sagas from "./sagas"
 
-import { UserState } from "./modules/user"
+import { SigninState } from "./modules/signin/types"
 
 export type AppState = {
-  user: UserState
+  signin: SigninState
 }
 
 export default function configureStore(initialState = {}) {
-  const middleware = [logger, thunk]
+  const sagaMiddleware = createSagaMiddleware()
+  const middleware = [logger, sagaMiddleware]
   const store = createStore(reducer, initialState, applyMiddleware(...middleware))
+  sagaMiddleware.run(sagas)
 
   return store
 }
