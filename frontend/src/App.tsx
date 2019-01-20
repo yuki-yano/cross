@@ -2,11 +2,12 @@ import React from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import { hot } from "react-hot-loader"
 
-import Home from "./pages/Home"
+import Home from "./containers/Home"
+import SignIn from "./containers/SignIn"
+import Callback from "./containers/Callback"
+import Users from "./containers/Users"
+
 import NavBar from "./components/NavBar"
-import SignIn from "./pages/SignIn"
-import Callback from "./pages/Callback"
-import Users from "./pages/Users"
 
 function App() {
   return (

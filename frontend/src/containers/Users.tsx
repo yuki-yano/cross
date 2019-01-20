@@ -24,7 +24,7 @@ class Users extends React.Component<Props, State> {
   readonly state: State = initialState
 
   async componentDidMount() {
-    this.setState({ ...this.state, users: await getRequest("/users", {}, this.props.user.accessToken) })
+    this.setState({ ...this.state, users: await getRequest("/users", {}, this.props.signin.accessToken) })
   }
 
   render() {

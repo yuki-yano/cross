@@ -1,5 +1,4 @@
 import React from "react"
-import Cookies from "js-cookie"
 import uuid from "uuid/v4"
 
 export default function SignIn() {
@@ -14,7 +13,7 @@ export default function SignIn() {
 
 function signinState() {
   const state = uuid()
-  Cookies.set("SigninState", state)
+  localStorage.setItem("StateCode", state)
   return state
 }
 
