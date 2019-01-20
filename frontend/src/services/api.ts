@@ -3,8 +3,14 @@ import { stringify } from "querystring"
 import camelcaseKeys from "camelcase-keys"
 import decamelizeKeys from "decamelize-keys"
 
-type AuthResponse = {
-  accessToken: string
+export type AuthResponse = {
+  resolve?: {
+    accessToken: string
+  }
+  reject?: {
+    message: string
+    error: Error
+  }
 }
 
 const AUTH_URL = `//${process.env.API_HOST}/auth/slack`
@@ -12,14 +18,16 @@ const AUTH_URL = `//${process.env.API_HOST}/auth/slack`
 export async function fetchAuth(code: string): Promise<AuthResponse> {
   axios.defaults.withCredentials = true
 
-  const { data: response } = await axios.post(AUTH_URL, stringify({ code }))
-
-  return camelcaseKeys(response, { deep: true })
+  try {
+    const { data: response } = await axios.post(AUTH_URL, stringify({ code }))
+    return { resolve: camelcaseKeys(response, { deep: true }) }
+  } catch (error) {
+    return { reject: { message: "認証に失敗しました", error } }
+  }
 }
 
 function fetchFactory(token?: string, opts: object = {}) {
   opts = token ? { ...opts, headers: { Authorization: `Bearer ${token}` } } : { ...opts }
-  console.log(opts)
   return axios.create({
     baseURL: process.env.API_HOST,
     withCredentials: true,
