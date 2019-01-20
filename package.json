@@ -12,12 +12,12 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/camelcase-keys": "^4.0.0",
-    "@types/js-cookie": "^2.2.0",
     "@types/react": "^16.7.7",
     "@types/react-dom": "^16.0.10",
     "@types/react-redux": "^6.0.10",
     "@types/react-router": "^4.4.1",
     "@types/react-router-dom": "^4.3.1",
+    "@types/recompose": "^0.30.2",
     "@types/redux-logger": "^3.0.6",
     "@types/styled-components": "^4.1.1",
     "@types/uuid": "^3.4.4",
@@ -42,7 +42,6 @@
     "bulma": "^0.7.2",
     "camelcase-keys": "^5.0.0",
     "decamelize-keys": "^1.1.0",
-    "js-cookie": "^2.2.0",
     "query-string": "^6.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -50,13 +49,11 @@
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "recompose": "^0.30.0",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
+    "redux-saga": "^0.16.2",
     "styled-components": "^4.1.1",
-    "typescript-fsa": "^3.0.0-beta-2",
-    "typescript-fsa-reducers": "^1.1.0",
-    "typescript-fsa-redux-thunk": "^2.0.0-beta.11",
     "uuid": "^3.3.2"
   }
 }
