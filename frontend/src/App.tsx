@@ -1,31 +1,32 @@
 import React from "react"
-import { BrowserRouter as Router, Route } from "react-router-dom"
-import { hot } from "react-hot-loader"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { hot } from "react-hot-loader/root"
 
-import Home from "./containers/Home"
-import SignIn from "./containers/SignIn"
-import Callback from "./containers/Callback"
-import Users from "./containers/Users"
+import { NavRouter } from "./routes"
+import { Auth } from "./containers/Auth"
+import { SignIn } from "./containers/SignIn"
+import { Callback } from "./containers/Callback"
 
-import NavBar from "./components/NavBar"
+import { Header } from "./containers/Header"
 
-function App() {
+function AppComponent() {
   return (
     <Router>
-      <div>
-        <NavBar />
+      <Switch>
+        <Route path="/login" component={SignIn} />
+        <Route path="/callback" component={Callback} />
 
-        <section className="section">
-          <div className="container">
-            <Route exact={true} path="/" component={Home} />
-            <Route path="/signin" component={SignIn} />
-            <Route path="/callback" component={Callback} />
-            <Route path="/users" component={Users} />
-          </div>
-        </section>
-      </div>
+        <Auth>
+          <Header />
+          <section className="section">
+            <div className="container">
+              <NavRouter />
+            </div>
+          </section>
+        </Auth>
+      </Switch>
     </Router>
   )
 }
 
-export default hot(module)(App)
+export const App = hot(AppComponent)

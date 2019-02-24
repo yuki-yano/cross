@@ -3,18 +3,8 @@ const webpack = require("webpack")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
-  mode: process.env.NODE_ENV || "development",
-  entry: "./frontend/src/index.tsx",
-  output: {
-    path: path.join(__dirname, "frontend/dist"),
-    filename: "bundle.js"
-  },
-  devtool: "inline-source-map",
-  devServer: {
-    contentBase: path.join(__dirname, "frontend/src"),
-    inline: true,
-    hot: true,
-    historyApiFallback: true
+  entry: {
+    main: ["./frontend/src/index.tsx"]
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -23,17 +13,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: [{ loader: "ts-loader" }, { loader: "tslint-loader" }],
+        test: /\.(j|t)sx?$/,
+        use: "babel-loader",
         exclude: /node_modules/
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
-      {
         test: /\.html$/,
-        loader: "html-loader"
+        use: "html-loader"
       }
     ]
   },

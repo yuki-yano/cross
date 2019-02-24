@@ -1,21 +1,53 @@
-import { createStore, applyMiddleware } from "redux"
+import { createStore, applyMiddleware, compose } from "redux"
 import logger from "redux-logger"
-import createSagaMiddleware from "redux-saga"
+import thunk from "redux-thunk"
+import { persistReducer, persistStore, Persistor } from "redux-persist"
+import storage from "redux-persist/lib/storage"
 
-import reducer from "./reducers"
-import sagas from "./sagas"
+import { accessToken } from "./middlewares/accessToken"
 
-import { SigninState } from "./modules/signin/types"
+import { rootReducer } from "./reducers"
 
-export type AppState = {
+import { State as SigninState } from "./modules/signin"
+import { State as UsersState } from "./modules/users"
+
+export type State = {
   signin: SigninState
+  users: UsersState
 }
 
-export default function configureStore(initialState = {}) {
-  const sagaMiddleware = createSagaMiddleware()
-  const middleware = [logger, sagaMiddleware]
-  const store = createStore(reducer, initialState, applyMiddleware(...middleware))
-  sagaMiddleware.run(sagas)
+export type Store = ReturnType<typeof configureStore>["store"]
 
-  return store
+const persistConfig = {
+  key: "cross",
+  storage,
+  whitelist: ["signin"]
+}
+
+let persistor: Persistor
+
+function createEnhancer() {
+  const middleware = [accessToken, thunk, logger]
+
+  const composeEnhancers =
+    process.env.NODE_ENV !== "production" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+      : compose
+
+  return composeEnhancers(applyMiddleware(...middleware))
+}
+
+export function configureStore(initialState = {}) {
+  const enhancer = createEnhancer()
+  const persistedReducer = persistReducer(persistConfig, rootReducer)
+  const store = createStore(persistedReducer, initialState, enhancer)
+  persistor = persistStore(store)
+
+  return { store, persistor }
+}
+
+export function cleanPersistor() {
+  if (persistor) {
+    persistor.purge()
+  }
 }

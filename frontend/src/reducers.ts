@@ -1,8 +1,10 @@
 import { combineReducers } from "redux"
 
-import { AppState } from "./store"
-import signinReducer from "./modules/signin/reducers"
+import { State } from "./store"
+import { reducer as signinReducer } from "./modules/signin"
+import { reducer as usersReducer } from "./modules/users"
 
-export default combineReducers<AppState>({
-  signin: signinReducer
+export const rootReducer = combineReducers<State>({
+  signin: signinReducer,
+  users: usersReducer
 })

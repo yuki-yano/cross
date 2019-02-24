@@ -2,7 +2,7 @@
 
 class SessionsController < ApplicationController
   def create
-    response = SlackClient.identity(params[:token])
+    response = SlackUserClient.identity(params[:token])
     uid = response['user']['id']
 
     session[:uid] = uid
@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def test
-    response = SlackClient.identity(params[:token])
+    response = SlackUserClient.identity(params[:token])
     render json: response.to_json, status: :ok
   rescue Slack::Web::Api::Errors::SlackError => _e
     head :bad_request
