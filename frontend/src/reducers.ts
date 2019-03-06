@@ -8,3 +8,5 @@ export const rootReducer = combineReducers<State>({
   signin: signinReducer,
   users: usersReducer
 })
+
+export const none = (_: any) => _

@@ -31,8 +31,6 @@ module.exports = {
     }
   },
   rules: {
-    // never型の処理にconsole.debugを使うためにdebugを許容
-    // precommitとCIでは .eslintrc.strict.js を使って console.log を確認する
     "no-console": "off",
 
     "prettier/prettier": "error",

@@ -18,21 +18,27 @@ export type State = {
   error: Error | null
 }
 
-type FetchUserStartedAction = {
-  type: typeof FETCH_USER_STARTED
+type FetchUsersAction = {
+  type: typeof FETCH_USERS
 }
 
-export type Actions = FetchUserStartedAction | ReturnType<typeof fetchUserDone | typeof fetchUserFailed>
+export type Actions =
+  | FetchUsersAction
+  | ReturnType<typeof fetchUsersStarted | typeof fetchUserDone | typeof fetchUserFailed>
+
 const initialState: State = {
   items: [],
   error: null
 }
 
-const FETCH_USER_STARTED = "FETCH_USER_STARTED"
-const FETCH_USER_DONE = "FETCH_USER_DONE"
-const FETCH_USER_FAILED = "FETCH_USER_FAILED"
+const FETCH_USERS = "FETCH_USERS"
+const FETCH_USERS_STARTED = "FETCH_USERS_STARTED"
+const FETCH_USERS_DONE = "FETCH_USERS_DONE"
+const FETCH_USERS_FAILED = "FETCH_USERS_FAILED"
 
-export const fetchUsersStarted = () => async (dispatch: Dispatch) => {
+export const fetchUsers = () => async (dispatch: Dispatch) => {
+  dispatch(fetchUsersStarted())
+
   const token = localStorage.getItem("AccessToken") || ""
   try {
     const users: Array<User> = await getRequest("/users", {}, token)
@@ -43,27 +49,34 @@ export const fetchUsersStarted = () => async (dispatch: Dispatch) => {
   return
 }
 
+const fetchUsersStarted = () => ({
+  type: FETCH_USERS_STARTED as typeof FETCH_USERS_STARTED
+})
+
 const fetchUserDone = (payload: { users: Array<User> }) => ({
-  type: FETCH_USER_DONE as typeof FETCH_USER_DONE,
+  type: FETCH_USERS_DONE as typeof FETCH_USERS_DONE,
   payload
 })
 
 const fetchUserFailed = (payload: { error: Error }) => ({
-  type: FETCH_USER_FAILED as typeof FETCH_USER_FAILED,
+  type: FETCH_USERS_FAILED as typeof FETCH_USERS_FAILED,
   payload
 })
 
 export const reducer: Reducer<State, Actions> = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_USER_STARTED: {
+    case FETCH_USERS: {
       return state
     }
-    case FETCH_USER_DONE: {
+    case FETCH_USERS_STARTED: {
+      return state
+    }
+    case FETCH_USERS_DONE: {
       return produce(state, draft => {
         draft.items = action.payload.users
       })
     }
-    case FETCH_USER_FAILED: {
+    case FETCH_USERS_FAILED: {
       return produce(state, draft => {
         draft.items = []
         draft.error = action.payload.error
@@ -71,7 +84,8 @@ export const reducer: Reducer<State, Actions> = (state = initialState, action) =
     }
     default: {
       const _: never = action
-      console.debug(_)
+      const none = (_: any) => _
+      none(_)
 
       return state
     }

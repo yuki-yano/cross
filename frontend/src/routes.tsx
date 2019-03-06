@@ -5,7 +5,7 @@ import { Home } from "./containers/Home"
 import { Users } from "./containers/Users"
 import { SignOut } from "./containers/SignOut"
 
-export function NavRouter() {
+export const NavRouter = () => {
   return (
     <Switch>
       <Route exact={true} path="/" component={Home} />

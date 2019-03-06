@@ -26,7 +26,7 @@ const persistConfig = {
 
 let persistor: Persistor
 
-function createEnhancer() {
+const createEnhancer = () => {
   const middleware = [accessToken, thunk, logger]
 
   const composeEnhancers =
@@ -37,7 +37,7 @@ function createEnhancer() {
   return composeEnhancers(applyMiddleware(...middleware))
 }
 
-export function configureStore(initialState = {}) {
+export const configureStore = (initialState = {}) => {
   const enhancer = createEnhancer()
   const persistedReducer = persistReducer(persistConfig, rootReducer)
   const store = createStore(persistedReducer, initialState, enhancer)
@@ -46,7 +46,7 @@ export function configureStore(initialState = {}) {
   return { store, persistor }
 }
 
-export function cleanPersistor() {
+export const cleanPersistor = () => {
   if (persistor) {
     persistor.purge()
   }

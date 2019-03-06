@@ -9,7 +9,7 @@ export type AuthResponse =
 
 const AUTH_URL = `//${process.env.API_HOST}/auth/slack`
 
-export async function fetchAuth(code: string): Promise<AuthResponse> {
+export const fetchAuth = async (code: string): Promise<AuthResponse> => {
   axios.defaults.withCredentials = true
 
   try {
@@ -20,8 +20,8 @@ export async function fetchAuth(code: string): Promise<AuthResponse> {
   }
 }
 
-function fetchFactory(token?: string, opts: {} = {}) {
-  opts = token ? { ...opts, headers: { Authorization: `Bearer ${token}` } } : { ...opts }
+const fetchFactory = (token?: string, opts: {} = {}) => {
+  opts = token ? { ...opts, headers: { Authorization: `Bearer ${token}` } } : opts
   return axios.create({
     baseURL: process.env.API_HOST,
     withCredentials: true,
@@ -29,7 +29,7 @@ function fetchFactory(token?: string, opts: {} = {}) {
   })
 }
 
-export async function getRequest(endpoint: string, params?: {}, token?: string) {
+export const getRequest = async (endpoint: string, params?: {}, token?: string) => {
   const request = fetchFactory(token)
   const { data: result } = await request.get(
     endpoint,
@@ -39,7 +39,7 @@ export async function getRequest(endpoint: string, params?: {}, token?: string) 
   return camelcaseKeys(result, { deep: true })
 }
 
-export async function postRequest(endpoint: string, data: {}, token: string) {
+export const postRequest = async (endpoint: string, data: {}, token: string) => {
   const request = fetchFactory(token)
   const { data: result } = await request.post(endpoint, stringify(snakecaseKeys(data, { deep: true })))
 

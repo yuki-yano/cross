@@ -20,7 +20,8 @@ export const accessToken: Middleware = (_store: MiddlewareAPI<Dispatch, Store>) 
     }
     default: {
       const _: never = action
-      console.debug(_)
+      const none = (_: any) => _
+      none(_)
     }
   }
 

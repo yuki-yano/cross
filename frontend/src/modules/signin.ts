@@ -12,8 +12,8 @@ export type State = {
   loginError: Error | null
 }
 
-type SigninStartedAction = {
-  type: typeof SIGNIN_STARTED
+type SigninAction = {
+  type: typeof SIGNIN
   payload: {
     code: string
     stateCode: string
@@ -22,8 +22,8 @@ type SigninStartedAction = {
 
 export type Actions =
   | ReturnType<typeof readySignin>
-  | SigninStartedAction
-  | ReturnType<typeof signinDone | typeof signinFailed>
+  | SigninAction
+  | ReturnType<typeof signinStarted | typeof signinDone | typeof signinFailed>
   | ReturnType<typeof signout>
 
 const initialState: State = {
@@ -36,6 +36,7 @@ const initialState: State = {
 }
 
 const READY_SIGNIN = "READY_SIGNIN"
+const SIGNIN = "SIGNIN"
 const SIGNIN_STARTED = "SIGNIN_STARTED"
 export const SIGNIN_DONE = "SIGNIN_DONE"
 const SIGNIN_FAILED = "SIGNIN_FAILED"
@@ -46,13 +47,10 @@ export const readySignin = (payload: { stateCode: string }) => ({
   payload
 })
 
-export const signinStarted = (payload: { code: string; stateCode: string }) => async (dispatch: Dispatch) => {
-  // if (stateCode !== payload.stateCode) {
-  //   throw new Error("Stateが一致しません")
-  // }
+export const signin = (payload: { code: string; stateCode: string }) => async (dispatch: Dispatch) => {
+  dispatch(signinStarted())
 
   const { resolve, reject } = await fetchAuth(payload.code)
-
   if (resolve) {
     dispatch(signinDone({ userName: resolve.user.name, accessToken: resolve.accessToken }))
   } else if (reject) {
@@ -62,12 +60,16 @@ export const signinStarted = (payload: { code: string; stateCode: string }) => a
   return
 }
 
+const signinStarted = () => ({
+  type: SIGNIN_STARTED as typeof SIGNIN_STARTED
+})
+
 export const signinDone = (payload: { userName: string; accessToken: string }) => ({
   type: SIGNIN_DONE as typeof SIGNIN_DONE,
   payload
 })
 
-const signinFailed = (payload: { error: Error }) => ({
+export const signinFailed = (payload: { error: Error }) => ({
   type: SIGNIN_FAILED as typeof SIGNIN_FAILED,
   payload
 })
@@ -82,6 +84,9 @@ export const reducer: Reducer<State, Actions> = (state = initialState, action) =
       return produce(state, draft => {
         draft.stateCode = action.payload.stateCode
       })
+    }
+    case SIGNIN: {
+      return state
     }
     case SIGNIN_STARTED: {
       return produce(state, draft => {
@@ -126,7 +131,8 @@ export const reducer: Reducer<State, Actions> = (state = initialState, action) =
     }
     default: {
       const _: never = action
-      console.debug(_)
+      const none = (_: any) => _
+      none(_)
 
       return state
     }

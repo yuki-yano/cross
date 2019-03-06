@@ -9,7 +9,7 @@ import { Callback } from "./containers/Callback"
 
 import { Header } from "./containers/Header"
 
-function AppComponent() {
+const AppComponent = () => {
   return (
     <Router>
       <Switch>

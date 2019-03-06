@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { ThunkDispatch } from "redux-thunk"
 
 import { State } from "../../store"
-import { State as UsersState, Actions, fetchUsersStarted, getUsers } from "../../modules/users"
+import { State as UsersState, Actions, fetchUsers, getUsers } from "../../modules/users"
 import { Users as UsersComponent } from "../../components/Users"
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
@@ -15,7 +15,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<UsersState, undefined, Actions>) => ({
   async onFetchUsers() {
     try {
-      await dispatch(fetchUsersStarted())
+      await dispatch(fetchUsers())
     } catch (e) {
       console.error(e)
     }
