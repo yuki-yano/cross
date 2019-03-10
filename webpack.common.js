@@ -13,11 +13,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(j|t)sx?$/,
-        use: "babel-loader",
-        exclude: /node_modules/
-      },
-      {
         test: /\.html$/,
         use: "html-loader"
       }

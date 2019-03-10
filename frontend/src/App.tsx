@@ -1,32 +1,40 @@
 import React from "react"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { Provider } from "react-redux"
+import { PersistGate } from "redux-persist/integration/react"
+import { Router, Route, Switch } from "react-router-dom"
 import { hot } from "react-hot-loader/root"
 
+import { configureStore, history } from "./store"
 import { NavRouter } from "./routes"
+import { Navbar } from "./containers/Navbar"
 import { Auth } from "./containers/Auth"
 import { SignIn } from "./containers/SignIn"
 import { Callback } from "./containers/Callback"
 
-import { Header } from "./containers/Header"
+import { Container } from "./components/common/Container"
 
-const AppComponent = () => {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/login" component={SignIn} />
-        <Route path="/callback" component={Callback} />
+const { store, persistor } = configureStore()
 
-        <Auth>
-          <Header />
-          <section className="section">
-            <div className="container">
-              <NavRouter />
-            </div>
-          </section>
-        </Auth>
-      </Switch>
-    </Router>
-  )
-}
+const AppComponent = hot(() => (
+  <Router history={history}>
+    <Switch>
+      <Route path="/login" component={SignIn} />
+      <Route path="/callback" component={Callback} />
 
-export const App = hot(AppComponent)
+      <Auth>
+        <Navbar />
+        <Container>
+          <NavRouter />
+        </Container>
+      </Auth>
+    </Switch>
+  </Router>
+))
+
+export const App = () => (
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <AppComponent />
+    </PersistGate>
+  </Provider>
+)

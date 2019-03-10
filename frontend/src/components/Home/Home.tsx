@@ -1,12 +1,10 @@
 import React from "react"
 
-export const Home: React.FC = () => {
-  return (
-    <>
-      <h1 className="title">Hello World</h1>
-      <p className="subtitle">
-        My first website with <strong>Bulma</strong>!
-      </p>
-    </>
-  )
-}
+export const Home: React.FC = () => (
+  <>
+    <h2>Hello World</h2>
+    <p>
+      My first website with <strong>Bootstrap</strong>!
+    </p>
+  </>
+)

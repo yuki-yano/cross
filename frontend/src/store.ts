@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux"
+import { createBrowserHistory } from "history"
 import logger from "redux-logger"
 import thunk from "redux-thunk"
 import { persistReducer, persistStore, Persistor } from "redux-persist"
@@ -17,6 +18,8 @@ export type State = {
 }
 
 export type Store = ReturnType<typeof configureStore>["store"]
+
+export const history = createBrowserHistory()
 
 const persistConfig = {
   key: "cross",

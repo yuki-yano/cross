@@ -2,7 +2,6 @@ import { Dispatch, Reducer } from "redux"
 import { createSelector } from "reselect"
 import produce from "immer"
 
-import { State as RootState } from "../store"
 import { getRequest } from "../services/api"
 
 type User = {
@@ -93,6 +92,6 @@ export const reducer: Reducer<State, Actions> = (state = initialState, action) =
 }
 
 export const getUsers = createSelector(
-  (state: RootState) => state.users,
-  users => users
+  (state: State) => state,
+  ({ items }) => items
 )

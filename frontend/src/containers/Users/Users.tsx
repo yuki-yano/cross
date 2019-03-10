@@ -9,7 +9,7 @@ import { Users as UsersComponent } from "../../components/Users"
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 const mapStateToProps = (state: State) => ({
-  users: getUsers(state)
+  users: getUsers(state.users)
 })
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<UsersState, undefined, Actions>) => ({
@@ -22,11 +22,11 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<UsersState, undefined, Actio
   }
 })
 
-const UsersContainer: React.FC<Props> = props => {
+const UsersContainer: React.FC<Props> = ({ users, onFetchUsers }) => {
   useEffect(() => {
-    props.onFetchUsers()
+    onFetchUsers()
   }, [])
-  return <UsersComponent users={props.users.items} />
+  return <UsersComponent users={users} />
 }
 
 export const Users = connect(

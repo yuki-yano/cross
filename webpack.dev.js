@@ -16,6 +16,16 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
+        test: /\.(j|t)sx?$/,
+        use: "babel-loader",
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(j|t)sx?$/,
+        use: "react-hot-loader/webpack",
+        include: /node_modules/
+      },
+      {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
       }

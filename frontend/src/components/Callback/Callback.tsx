@@ -5,11 +5,9 @@ type Props = {
   message: string
 }
 
-export const Callback: React.FC<Props> = ({ message }) => {
-  return (
-    <>
-      <p>{message}</p>
-      <Link to="/login">Login</Link>
-    </>
-  )
-}
+export const Callback: React.FC<Props> = ({ message }) => (
+  <>
+    <p>{message}</p>
+    <Link to="/login">Login</Link>
+  </>
+)

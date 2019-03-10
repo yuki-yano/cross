@@ -7,13 +7,13 @@ import queryString from "query-string"
 
 import { Callback as CallbackComponent } from "../../components/Callback"
 import { State } from "../../store"
-import { signin, signinFailed, State as SigninState } from "../../modules/signin"
+import { signin, signinFailed, getLoginState, State as SigninState } from "../../modules/signin"
 
 export type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
-const mapStateToProps = (state: State): SigninState => ({
-  ...state.signin
-})
+const mapStateToProps = (state: State) => {
+  return getLoginState(state.signin)
+}
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<SigninState, undefined, Action>) => ({
   onSignin(payload: { code: string; stateCode: string }) {
@@ -28,31 +28,38 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<SigninState, undefined, Acti
   }
 })
 
-const CallbackContainer: React.FC<Props> = props => {
+const CallbackContainer: React.FC<Props> = ({
+  stateCode,
+  isLogin,
+  isLoading,
+  loginError,
+  onSignin,
+  onSigninFailed
+}) => {
   useEffect(() => {
     const parsed = queryString.parse(location.search)
-    const { code, state: stateCode } = parsed
+    const { code, state } = parsed
 
-    if (typeof code === "string" && typeof stateCode === "string") {
-      if (stateCode === props.stateCode) {
-        props.onSignin({ code, stateCode })
+    if (!isLogin && typeof code === "string" && typeof state === "string") {
+      if (state === stateCode) {
+        onSignin({ code, stateCode })
       } else {
-        props.onSigninFailed({ error: new Error("Stateが一致しません") })
+        onSigninFailed({ error: new Error("Stateが一致しません") })
       }
     } else {
-      props.onSigninFailed({ error: new Error("URLが不正です") })
+      onSigninFailed({ error: new Error("URLが不正です") })
     }
   }, [])
 
   let message: string = ""
 
-  if (props.isLoading) {
+  if (isLoading) {
     message = "ログイン処理中です"
-  } else if (props.loginError) {
-    message = props.loginError.message
+  } else if (loginError) {
+    message = loginError.message
   }
 
-  return props.isLogin ? <Redirect to="/" /> : <CallbackComponent message={message} />
+  return isLogin ? <Redirect to="/" /> : <CallbackComponent message={message} />
 }
 
 export const Callback = connect(

@@ -1,4 +1,5 @@
 import { Dispatch, Reducer } from "redux"
+import { createSelector } from "reselect"
 import produce from "immer"
 
 import { fetchAuth } from "../services/api"
@@ -138,3 +139,25 @@ export const reducer: Reducer<State, Actions> = (state = initialState, action) =
     }
   }
 }
+
+export const getStateCode = createSelector(
+  (state: State) => state,
+  ({ stateCode }) => ({ stateCode })
+)
+
+export const getIsLogin = createSelector(
+  (state: State) => state,
+  ({ isLogin }) => ({ isLogin })
+)
+
+export const getLoginState = createSelector(
+  (state: State) => state,
+  ({ stateCode, isLogin, isLoading, loginError }) => {
+    return {
+      stateCode,
+      isLogin,
+      isLoading,
+      loginError
+    }
+  }
+)

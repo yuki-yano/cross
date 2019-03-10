@@ -5,6 +5,7 @@ const TerserPlugin = require("terser-webpack-plugin")
 const ManifestPlugin = require("webpack-manifest-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 const common = require("./webpack.common.js")
 
@@ -18,6 +19,11 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
+        test: /\.(j|t)sx?$/,
+        use: "babel-loader",
+        exclude: /node_modules/
+      },
+      {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
       }
@@ -29,7 +35,8 @@ module.exports = merge(common, {
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
-    })
+    }),
+    new BundleAnalyzerPlugin({ analyzerMode: "static", logLevel: "silent" })
   ],
   optimization: {
     minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin()],

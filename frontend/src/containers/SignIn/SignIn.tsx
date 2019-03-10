@@ -4,14 +4,12 @@ import { connect } from "react-redux"
 import uuid from "uuid/v4"
 
 import { State } from "../../store"
-import { readySignin } from "../../modules/signin"
+import { readySignin, getStateCode } from "../../modules/signin"
 import { SignIn as SignInComponent } from "../../components/SignIn"
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
-const mapStateToProps = (state: State) => {
-  return { stateCode: state.signin.stateCode }
-}
+const mapStateToProps = (state: State) => getStateCode(state.signin)
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onReadySignin() {
@@ -19,14 +17,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   }
 })
 
-const SignInContainer: React.FC<Props> = props => {
+const SignInContainer: React.FC<Props> = ({ onReadySignin, stateCode }) => {
   useEffect(() => {
-    props.onReadySignin()
+    onReadySignin()
   }, [])
 
   const signinUrl = `https://slack.com/oauth/authorize?client_id=${process.env.SLACK_USER_CLIENT_ID}&scope=${
     process.env.SLACK_SCOPES
-  }&state=${props.stateCode}`
+  }&state=${stateCode}`
 
   return <SignInComponent signInUrl={signinUrl} />
 }
