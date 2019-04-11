@@ -6,9 +6,7 @@ import { Auth as AuthComponent } from "../../components/Auth"
 import { State } from "../../store"
 import { getIsLogin } from "../../modules/signin"
 
-type OwnProps = { children: JSX.Element | Array<JSX.Element> }
-
-export type Props = OwnProps & ReturnType<typeof mapStateToProps>
+export type Props = ReturnType<typeof mapStateToProps>
 
 const mapStateToProps = (state: State) => getIsLogin(state.signin)
 

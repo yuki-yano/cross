@@ -3,7 +3,7 @@ import { Link as RouteLink, LinkProps } from "react-router-dom"
 import styled from "styled-components"
 import { Box, BoxProps } from "@rebass/grid"
 
-type NavbarLinkProps = {
+type Props = {
   label: string
   width: number
   to: LinkProps["to"]
@@ -11,7 +11,7 @@ type NavbarLinkProps = {
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void
 }
 
-export const NavbarLink: React.FC<NavbarLinkProps> = ({ to, width, label, isActive, onClick }) => (
+export const NavbarLink: React.FC<Props> = ({ to, width, label, isActive, onClick }) => (
   <NavBox active={String(isActive)} width={width} px={2}>
     <Link to={to} active={String(isActive)} onClick={onClick}>
       {label}

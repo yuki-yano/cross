@@ -15,18 +15,16 @@ export const Navbar: React.FC<Props> = ({ path, links, onClick }) => (
   <Nav>
     <Container>
       <Flex>
-        {links.map(({ label, to }) => {
-          return (
-            <NavbarLink
-              key={to}
-              label={label}
-              width={1 / links.length}
-              to={to}
-              isActive={path === to}
-              onClick={onClick}
-            />
-          )
-        })}
+        {links.map(({ label, to }) => (
+          <NavbarLink
+            key={to}
+            label={label}
+            width={1 / links.length}
+            to={to}
+            isActive={path === to}
+            onClick={onClick}
+          />
+        ))}
       </Flex>
     </Container>
   </Nav>
